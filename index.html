@@ -187,11 +187,12 @@ input[type=date]{width:100%;font:inherit;font-size:18px;padding:10px;border:none
   <!-- Scelta -->
   <section class="screen" id="s2">
     <p class="small center">Art. 1, oggetto del trattamento</p>
-    <h1 class="center">Come preferisci?</h1>
+    <h1 class="center">Cosa preferisci?</h1>
     <div class="opts" data-key="formula">
       <button class="opt" data-val="Aperitivo"><div><b>Aperitivo</b><span>Un calice e due chiacchiere</span></div></button>
       <button class="opt" data-val="Pizza"><div><b>Pizza</b><span>Qualità certificata ISO 9001</span></div></button>
       <button class="opt" data-val="Sushi"><div><b>Sushi</b><span>Precisione da standard ISO</span></div></button>
+      <button class="opt" data-val="Sorpresa, a cura del titolare"><div><b>Sorpresa</b><span>Unica deroga al principio di trasparenza</span></div></button>
     </div>
     <div class="btns"><button id="next2" disabled>Prosegui</button></div>
   </section>
@@ -275,7 +276,7 @@ input[type=date]{width:100%;font:inherit;font-size:18px;padding:10px;border:none
       o.setAttribute('aria-pressed','true'); choices.formula=o.dataset.val; next2.disabled=false;
     });
   });
-  const slots={Aperitivo:['18:30','19:00','19:30'],Pizza:['20:00','20:30','21:00'],Sushi:['20:00','20:30','21:00']};
+  const slots={Aperitivo:['18:30','19:00','19:30'],Pizza:['20:00','20:30','21:00'],Sushi:['20:00','20:30','21:00'],'Sorpresa, a cura del titolare':['19:00','19:30','20:00']};
   const times=document.getElementById('times'), next3=document.getElementById('next3');
   const check3=()=>{ next3.disabled=!(choices.ora && choices.day); };
   // Prossimi 14 giorni a partire da oggi, calcolati all'apertura

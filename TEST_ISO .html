@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Alla cortese attenzione della dott.ssa Chiara</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --desk:#17202e; --desk-2:#0f1622;
+  --paper:#fbfaf6; --ink:#1c2230; --muted:#6a6f7b; --hair:#d8d3c7;
+  --gold:#a8894f; --wax:#7a1f2b; --wax-hi:#a33543; --wax-lo:#4e1119; --ok:#7a1f2b;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){ --desk:#1d2738; --desk-2:#131b28; }
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --desk:#141b27; --desk-2:#0b111a; }
+}
+:root[data-theme="dark"]{ --desk:#141b27; --desk-2:#0b111a; }
+:root[data-theme="light"]{ --desk:#1d2738; --desk-2:#131b28; }
+*,*::before,*::after{box-sizing:inherit}
+button{-webkit-tap-highlight-color:transparent}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0;min-height:100%;
+  font-family:"EB Garamond",Garamond,"Times New Roman",Georgia,serif;
+  color:var(--ink);background-color:var(--desk);
+  background-image:
+    radial-gradient(ellipse 80% 70% at 50% 40%, transparent 30%, var(--desk-2) 100%),
+    repeating-linear-gradient(0deg, rgba(255,255,255,.018) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.014) 0 1px, transparent 1px 4px);
+  display:flex;align-items:center;justify-content:center;padding:28px 16px;
+}
+.sheet{
+  position:relative;width:100%;max-width:440px;background:var(--paper);
+  padding:40px 32px 32px;border-radius:2px;
+  box-shadow:0 1px 0 rgba(255,255,255,.4) inset,0 30px 70px rgba(0,0,0,.5),0 2px 6px rgba(0,0,0,.3);
+}
+.sheet::before{content:"";position:absolute;inset:12px;border:1px solid var(--gold);opacity:.55;pointer-events:none}
+.sheet::after{content:"";position:absolute;inset:16px;border:.5px solid var(--gold);opacity:.35;pointer-events:none}
+.screen{display:none;flex-direction:column;gap:18px;position:relative;z-index:1}
+.screen.on{display:flex;animation:fade .5s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.center{text-align:center}
+.small{font-size:14px;color:var(--muted);margin:0;line-height:1.4}
+.italic{font-style:italic}
+h1{font-weight:500;font-size:clamp(28px,7.6vw,34px);line-height:1.12;margin:0;letter-spacing:-.005em}
+h2{font-weight:500;font-size:22px;margin:0}
+p{margin:0;font-size:18px;line-height:1.55}
+.rule{height:1px;background:var(--gold);opacity:.6;width:56px;margin:0 auto}
+.head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--hair);padding-bottom:10px}
+.closing{text-align:right;font-style:italic}
+.closing b{display:block;font-weight:500;font-size:24px}
+/* Calendario */
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.day{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 0;background:transparent;color:var(--ink);border:1px solid var(--hair);letter-spacing:0;font-size:20px;line-height:1}
+.day small{font-size:12px;font-style:italic;color:var(--muted)}
+.day:hover{border-color:var(--ink);background:transparent}
+.day[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.day[aria-pressed="true"] small{color:var(--paper)}
+.month{font-style:italic;color:var(--muted);text-align:center;margin:0 0 8px;font-size:15px}
+.btns{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:6px}
+button,a.act{
+  font-family:inherit;font-size:17px;font-weight:500;letter-spacing:.03em;cursor:pointer;
+  border:1px solid var(--ink);border-radius:2px;padding:11px 26px;
+  background:var(--ink);color:var(--paper);text-decoration:none;display:inline-block;text-align:center;
+  transition:background .2s,color .2s,transform .1s;
+}
+button:hover,a.act:hover{background:#2c3448}
+button:active,a.act:active{transform:translateY(1px)}
+button:focus-visible,a.act:focus-visible,input:focus-visible,.seal:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+button:disabled{opacity:.35;cursor:not-allowed}
+.plain{background:transparent;color:var(--ink)}
+.plain:hover{background:rgba(28,34,48,.05)}
+#noBtn{z-index:50;background:var(--paper);color:var(--ink)}
+#noBtn.loose{position:fixed;transition:left .3s ease,top .3s ease;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+
+/* Busta con sigillo */
+.addr{font-style:italic;font-size:21px;line-height:1.4}
+.seal{
+  position:relative;width:118px;height:118px;margin:8px auto 0;border:none;padding:0;background:none;cursor:pointer;filter:drop-shadow(0 6px 10px rgba(78,17,25,.4));
+}
+.seal:hover{background:none}
+.half{
+  position:absolute;inset:0;border-radius:50%;
+  background:radial-gradient(circle at 38% 32%, var(--wax-hi), var(--wax) 48%, var(--wax-lo) 100%);
+  box-shadow:inset 0 0 0 7px rgba(0,0,0,.08), inset 0 0 0 9px rgba(255,255,255,.07);
+  display:flex;align-items:center;justify-content:center;
+  font-style:italic;font-weight:500;font-size:62px;color:rgba(0,0,0,.28);
+  text-shadow:0 1px 0 rgba(255,255,255,.18);
+  transition:transform .7s cubic-bezier(.3,.7,.3,1),opacity .7s;
+}
+.half.l{clip-path:polygon(0 0,52% 0,46% 30%,54% 55%,47% 78%,51% 100%,0 100%)}
+.half.r{clip-path:polygon(52% 0,100% 0,100% 100%,51% 100%,47% 78%,54% 55%,46% 30%)}
+.seal.broken .l{transform:translate(-26px,14px) rotate(-18deg);opacity:0}
+.seal.broken .r{transform:translate(26px,14px) rotate(18deg);opacity:0}
+
+/* Scelte */
+.opts{display:grid;gap:10px}
+.opt{
+  display:grid;grid-template-columns:1fr auto;align-items:center;text-align:left;
+  background:transparent;color:var(--ink);border:1px solid var(--hair);padding:14px 16px;letter-spacing:0
+}
+.opt:hover{background:rgba(28,34,48,.03);border-color:var(--ink)}
+.opt b{font-weight:500;font-size:20px;display:block}
+.opt span{font-style:italic;color:var(--muted);font-size:16px}
+.opt::after{content:"";width:14px;height:14px;border:1px solid var(--ink);border-radius:50%}
+.opt[aria-pressed="true"]{border-color:var(--ink);background:rgba(28,34,48,.04)}
+.opt[aria-pressed="true"]::after{background:var(--ink);box-shadow:inset 0 0 0 3px var(--paper)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.chip{background:transparent;color:var(--ink);padding:8px 18px;letter-spacing:.02em}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+label,.lbl{display:block;font-size:15px;color:var(--muted);font-style:italic;margin-bottom:8px;text-align:center}
+input[type=date]{width:100%;font:inherit;font-size:18px;padding:10px;border:none;border-bottom:1px solid var(--ink);background:transparent;color:var(--ink);text-align:center;border-radius:0}
+
+/* Verbale */
+.minutes{border-top:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+.minutes div{display:grid;grid-template-columns:120px 1fr;gap:12px;padding:9px 0;border-top:1px solid var(--hair);font-size:17px;line-height:1.35}
+.minutes div:first-child{border-top:none}
+.minutes dt{color:var(--muted);font-style:italic}
+.minutes dd{margin:0}
+.stamp{
+  position:absolute;right:10%;top:-4px;transform:rotate(-9deg);
+  color:var(--wax);border:2px solid var(--wax);border-radius:3px;padding:2px 10px;
+  font-size:17px;letter-spacing:.06em;opacity:.85;background:rgba(251,250,246,.6)
+}
+.sig{display:flex;justify-content:space-between;gap:20px;margin-top:4px}
+.sig div{flex:1;text-align:center}
+.sig .line{border-bottom:1px solid var(--ink);height:34px;font-style:italic;font-size:22px;line-height:40px}
+.sig .small{margin-top:4px}
+/* Firma */
+.padhead{display:flex;justify-content:space-between;align-items:baseline}
+.pad{display:block;width:100%;height:120px;border-bottom:1px solid var(--ink);background:linear-gradient(transparent 70%,rgba(168,137,79,.06));touch-action:none;cursor:crosshair}
+.link{background:none;border:none;color:var(--muted);font-style:italic;padding:0;font-size:15px;letter-spacing:0;text-decoration:underline}
+.link:hover{background:none;color:var(--ink)}
+@media (prefers-reduced-motion: reduce){
+  .screen.on{animation:none} .half{transition:none} #noBtn.loose{transition:none}
+}
+@media (max-width:380px){ .sheet{padding:36px 24px 26px} .minutes div{grid-template-columns:100px 1fr} }
+</style>
+</head>
+<body>
+<main class="sheet" id="sheet">
+
+  <!-- Busta -->
+  <section class="screen on center" id="s0">
+    <p class="small">Riservata e personale</p>
+    <p class="addr">Alla cortese attenzione<br>della dott.ssa Chiara</p>
+    <div class="rule"></div>
+    <button class="seal" id="seal" aria-label="Apri il sigillo">
+      <span class="half l" aria-hidden="true">C</span>
+      <span class="half r" aria-hidden="true">C</span>
+    </button>
+    <p class="small italic">Tocca il sigillo per aprire</p>
+  </section>
+
+  <!-- Lettera -->
+  <section class="screen" id="s1">
+    <div class="head"><span class="small">Roma, <span id="today"></span></span><span class="small">Prot. n. 1</span></div>
+    <p class="small"><i>Oggetto:</i> informativa e richiesta di consenso ai sensi dell'art. 6, par. 1, lett. a) del Reg. (UE) 2016/679</p>
+    <p>Gentile Chiara,</p>
+    <p>a chi si occupa ogni giorno di sicurezza, dati e intelligenza artificiale non si può rivolgere una richiesta qualunque.</p>
+    <p>Con la presente, quindi, nel pieno rispetto dei principi di trasparenza e minimizzazione, ti chiedo il consenso libero, specifico, informato e inequivocabile a trascorrere una serata con il sottoscritto.</p>
+    <p>Nessun dato sarà ceduto a terzi. L'unico rischio residuo è divertirsi.</p>
+    <p class="closing">Con osservanza,<b>Vlad</b></p>
+    <p class="small italic center">Procedura conforme alla ISO/IEC 27001. Audit di terza parte non richiesto.</p>
+    <div class="btns">
+      <button id="yesBtn">Acconsento</button>
+      <button id="noBtn" class="plain">Mi oppongo</button>
+    </div>
+  </section>
+
+  <section class="screen center" id="sNo">
+    <p class="small">Art. 21</p>
+    <h1>Opposizione accolta</h1>
+    <div class="rule"></div>
+    <p>Nessun problema, Chiara. Amici come prima: il caffè di domani lo offro comunque.</p>
+    <p class="closing" style="text-align:center"><b>Vlad</b></p>
+  </section>
+
+  <!-- Scelta -->
+  <section class="screen" id="s2">
+    <p class="small center">Art. 1, oggetto del trattamento</p>
+    <h1 class="center">Come preferisci?</h1>
+    <div class="opts" data-key="formula">
+      <button class="opt" data-val="Aperitivo"><div><b>Aperitivo</b><span>Un calice e due chiacchiere</span></div></button>
+      <button class="opt" data-val="Pizza"><div><b>Pizza</b><span>Qualità certificata ISO 9001</span></div></button>
+      <button class="opt" data-val="Sushi"><div><b>Sushi</b><span>Precisione da standard ISO</span></div></button>
+    </div>
+    <div class="btns"><button id="next2" disabled>Prosegui</button></div>
+  </section>
+
+  <!-- Quando -->
+  <section class="screen" id="s3">
+    <p class="small center">Art. 2, termini</p>
+    <h1 class="center">Quando?</h1>
+    <div><span class="lbl">Giorno</span><p class="month" id="monthLbl"></p><div class="cal" id="cal"></div></div>
+    <div><span class="lbl">Orario</span><div class="chips" id="times"></div></div>
+    <div class="btns"><button id="next3" disabled>Conferma</button></div>
+  </section>
+
+  <!-- Verbale -->
+  <section class="screen" id="s4">
+    <p class="small center">Verbale di consenso</p>
+    <h1 class="center">Tutto agli atti</h1>
+    <dl class="minutes" id="minutes" style="margin:0"></dl>
+    <div>
+      <div class="padhead"><span class="lbl" style="margin:0">Firma dell'interessata</span><button class="link" id="clearSig" type="button">Cancella</button></div>
+      <canvas id="pad" class="pad" aria-label="Spazio per la firma"></canvas>
+    </div>
+    <div class="btns"><button id="sendBtn">Firma e invia il verbale</button></div>
+    <p class="small center italic" id="note" role="status"></p>
+  </section>
+</main>
+
+<script>
+(function(){
+  const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const show=id=>{
+    document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));
+    const f=document.querySelector('#'+id+' h1, #'+id+' p'); if(f){f.setAttribute('tabindex','-1');f.focus({preventScroll:true});}
+  };
+  const it = d => d.toLocaleDateString('it-IT',{day:'numeric',month:'long',year:'numeric'});
+  try{ document.getElementById('today').textContent = it(new Date()); }catch(e){}
+
+  // Sigillo
+  const seal=document.getElementById('seal');
+  seal.addEventListener('click',()=>{
+    seal.classList.add('broken');
+    setTimeout(()=>show('s1'), reduce?0:650);
+  });
+
+  const choices={formula:null,ora:null,day:''};
+
+  // Consenso
+  document.getElementById('yesBtn').addEventListener('click',()=>show('s2'));
+
+  // "Mi oppongo" scappa lontano da "Acconsento"
+  const no=document.getElementById('noBtn'), yes=document.getElementById('yesBtn');
+  const labels=['Mi oppongo','Opposizione respinta','Non conforme alla ISO 27001','Ricorso al Garante?','Ok, mi oppongo davvero'];
+  let tries=0;
+  const dodge=e=>{
+    if(tries>=labels.length-1) return;
+    if(e) e.preventDefault();
+    tries++; no.textContent=labels[tries];
+    const vw=innerWidth, vh=innerHeight, m=16;
+    const y=yes.getBoundingClientRect(), yc=[y.left+y.width/2,y.top+y.height/2];
+    const cur=no.getBoundingClientRect(), w=no.offsetWidth, h=no.offsetHeight;
+    const minDist=Math.min(vw,vh)*0.42;
+    let best=null,bestS=-1;
+    for(let i=0;i<40;i++){
+      const x=m+Math.random()*Math.max(0,vw-w-2*m), t=m+Math.random()*Math.max(0,vh-h-2*m);
+      const dY=Math.hypot(x+w/2-yc[0],t+h/2-yc[1]), dC=Math.hypot(x-cur.left,t-cur.top);
+      if(dY>minDist && dC>minDist*0.6){best=[x,t];break;}
+      const s=Math.min(dY,dC*1.2); if(s>bestS){bestS=s;best=[x,t];}
+    }
+    if(!no.classList.contains('loose')){no.style.left=cur.left+'px';no.style.top=cur.top+'px';no.classList.add('loose');void no.offsetWidth;}
+    no.style.left=best[0]+'px'; no.style.top=best[1]+'px';
+  };
+  no.addEventListener('pointerenter',e=>{ if(e.pointerType==='mouse') dodge(); });
+  no.addEventListener('click',e=>{ if(tries>=labels.length-1){ show('sNo'); return; } dodge(e); });
+
+  // Scelta formula
+  const next2=document.getElementById('next2');
+  document.querySelectorAll('.opt').forEach(o=>{
+    o.setAttribute('aria-pressed','false');
+    o.addEventListener('click',()=>{
+      document.querySelectorAll('.opt').forEach(x=>x.setAttribute('aria-pressed','false'));
+      o.setAttribute('aria-pressed','true'); choices.formula=o.dataset.val; next2.disabled=false;
+    });
+  });
+  const slots={Aperitivo:['18:30','19:00','19:30'],Pizza:['20:00','20:30','21:00'],Sushi:['20:00','20:30','21:00']};
+  const times=document.getElementById('times'), next3=document.getElementById('next3');
+  const check3=()=>{ next3.disabled=!(choices.ora && choices.day); };
+  // Prossimi 14 giorni a partire da oggi, calcolati all'apertura
+  (function buildCal(){
+    const cal=document.getElementById('cal'), today=new Date(); today.setHours(12,0,0,0);
+    const wd=['dom','lun','mar','mer','gio','ven','sab'], months=new Set();
+    for(let i=0;i<14;i++){
+      const d=new Date(today); d.setDate(today.getDate()+i);
+      const iso=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+      months.add(d.toLocaleDateString('it-IT',{month:'long'})); var yr=d.getFullYear();
+      const b=document.createElement('button'); b.className='day'; b.setAttribute('aria-pressed','false');
+      b.setAttribute('aria-label',d.toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long'}));
+      b.innerHTML=`<small>${i===0?'oggi':wd[d.getDay()]}</small>${d.getDate()}`;
+      b.addEventListener('click',()=>{ cal.querySelectorAll('.day').forEach(x=>x.setAttribute('aria-pressed','false')); b.setAttribute('aria-pressed','true'); choices.day=iso; check3(); });
+      cal.appendChild(b);
+    }
+    document.getElementById('monthLbl').textContent=[...months].join(' e ')+' '+yr;
+  })();
+  next2.addEventListener('click',()=>{
+    if(next2.disabled) return;
+    choices.ora=null; times.innerHTML='';
+    slots[choices.formula].forEach(t=>{
+      const b=document.createElement('button'); b.className='chip'; b.textContent=t; b.setAttribute('aria-pressed','false');
+      b.addEventListener('click',()=>{ times.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed','false')); b.setAttribute('aria-pressed','true'); choices.ora=t; check3(); });
+      times.appendChild(b);
+    });
+    check3(); show('s3');
+  });
+
+  // Verbale
+  let quando='', rows=[];
+  next3.addEventListener('click',()=>{
+    if(next3.disabled) return;
+    quando=choices.day;
+    try{ quando=new Date(choices.day+'T12:00:00').toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long'}); }catch(e){}
+    quando+=', ore '+choices.ora;
+    rows=[
+      ['Interessata','dott.ssa Chiara'],
+      ['Titolare','Vlad'],
+      ['Oggetto',choices.formula],
+      ['Data e ora',quando],
+      ['Base giuridica','Consenso, art. 6.1.a'],
+      ['Norme applicate','ISO/IEC 27001 (riservatezza) e ISO 9001 (qualità della serata)'],
+      ['Valutazione d\'impatto','Rischio di serata piacevole: elevato'],
+      ['Conservazione','Fino alla prossima uscita']
+    ];
+    document.getElementById('minutes').innerHTML=rows.map(r=>`<div><dt>${r[0]}</dt><dd>${r[1]}</dd></div>`).join('');
+    show('s4'); setupPad();
+  });
+
+  // Firma a mano
+  const note=document.getElementById('note');
+  const pad=document.getElementById('pad'); let pctx, drawing=false, hasSig=false, last=null;
+  function setupPad(){
+    const r=pad.getBoundingClientRect(), dpr=Math.max(1,window.devicePixelRatio||1);
+    pad.width=Math.round(r.width*dpr); pad.height=Math.round(r.height*dpr);
+    pctx=pad.getContext('2d'); pctx.scale(dpr,dpr);
+    pctx.lineWidth=2.2; pctx.lineCap='round'; pctx.lineJoin='round'; pctx.strokeStyle='#1c2240';
+    hasSig=false;
+  }
+  const pos=e=>{const r=pad.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top];};
+  pad.addEventListener('pointerdown',e=>{ if(!pctx) return; note.textContent=''; drawing=true; last=pos(e); pad.setPointerCapture(e.pointerId); pctx.beginPath(); pctx.arc(last[0],last[1],1,0,Math.PI*2); pctx.fillStyle='#1c2240'; pctx.fill(); hasSig=true; });
+  pad.addEventListener('pointermove',e=>{ if(!drawing) return; const p=pos(e); pctx.beginPath(); pctx.moveTo(last[0],last[1]); pctx.lineTo(p[0],p[1]); pctx.stroke(); last=p; hasSig=true; });
+  ['pointerup','pointercancel','pointerleave'].forEach(t=>pad.addEventListener(t,()=>{drawing=false;}));
+  document.getElementById('clearSig').addEventListener('click',()=>{ setupPad(); });
+
+  // Genera il JPG del verbale
+  const FONT='"EB Garamond", Garamond, Georgia, serif';
+  function wrap(ctx,text,maxW){
+    const words=String(text).split(' '), lines=[]; let line='';
+    words.forEach(w=>{ const t=line?line+' '+w:w; if(ctx.measureText(t).width>maxW && line){lines.push(line);line=w;} else line=t; });
+    if(line) lines.push(line); return lines;
+  }
+  function renderJPG(){
+    const W=1080,H=1640,c=document.createElement('canvas'); c.width=W; c.height=H;
+    const x=c.getContext('2d');
+    x.fillStyle='#fbfaf6'; x.fillRect(0,0,W,H);
+    x.strokeStyle='rgba(168,137,79,.7)'; x.lineWidth=2; x.strokeRect(36,36,W-72,H-72);
+    x.strokeStyle='rgba(168,137,79,.45)'; x.lineWidth=1; x.strokeRect(48,48,W-96,H-96);
+    const ink='#1c2230', muted='#6a6f7b', hair='#d8d3c7';
+    x.textAlign='center'; x.fillStyle=muted; x.font=`30px ${FONT}`;
+    x.fillText('Verbale di consenso',W/2,150);
+    x.fillStyle=ink; x.font=`500 76px ${FONT}`; x.fillText('Tutto agli atti',W/2,240);
+    x.fillStyle='rgba(168,137,79,.8)'; x.fillRect(W/2-45,280,90,2);
+    x.textAlign='left'; x.fillStyle=muted; x.font=`28px ${FONT}`;
+    x.fillText('Roma, '+(document.getElementById('today').textContent||''),120,350);
+    x.textAlign='right'; x.fillText('Prot. n. 1',W-120,350);
+    let y=390; x.fillStyle=ink; x.fillRect(120,y,W-240,2);
+    y+=14;
+    rows.forEach((r,i)=>{
+      x.font=`36px ${FONT}`; const lines=wrap(x,r[1],W-120-440);
+      x.font=`italic 32px ${FONT}`; const llines=wrap(x,r[0],290);
+      const n=Math.max(lines.length,llines.length), h=n*46+34;
+      if(i>0){ x.fillStyle=hair; x.fillRect(120,y,W-240,1.5); }
+      x.textAlign='left';
+      x.fillStyle=muted; x.font=`italic 32px ${FONT}`; llines.forEach((l,k)=>x.fillText(l,120,y+52+k*46));
+      x.fillStyle=ink; x.font=`36px ${FONT}`; lines.forEach((l,k)=>x.fillText(l,440,y+52+k*46));
+      y+=h;
+    });
+    x.fillStyle=ink; x.fillRect(120,y,W-240,2);
+    // Firme
+    const sy=y+250;
+    x.fillStyle=ink; x.fillRect(120,sy,380,1.5); x.fillRect(W-500,sy,380,1.5);
+    if(hasSig){
+      const r=pad.width/pad.height, h=150, w=Math.min(380,h*r);
+      x.drawImage(pad,120+(380-w)/2,sy-h+10,w,h);
+    } else {
+      x.textAlign='center'; x.font=`italic 52px ${FONT}`; x.fillText('Chiara',310,sy-18);
+    }
+    x.textAlign='center'; x.fillStyle=muted; x.font=`28px ${FONT}`;
+    x.fillText("L'interessata",310,sy+44); x.fillText('Il titolare',W-310,sy+44);
+    x.fillStyle=ink; x.font=`italic 52px ${FONT}`; x.fillText('Vlad',W-310,sy-18);
+    // Timbro
+    x.save(); x.translate(W-290,sy-130); x.rotate(-9*Math.PI/180);
+    x.strokeStyle='rgba(122,31,43,.85)'; x.lineWidth=4; x.strokeRect(-130,-38,260,76);
+    x.fillStyle='rgba(122,31,43,.88)'; x.font=`500 44px ${FONT}`; x.textAlign='center'; x.textBaseline='middle';
+    x.fillText('Approvato',0,2); x.restore();
+    // Piede
+    x.textAlign='center'; x.textBaseline='alphabetic'; x.fillStyle=muted; x.font=`italic 26px ${FONT}`;
+    x.fillText('Redatto ai sensi del Reg. (UE) 2016/679, in regime di qualità ISO 9001.',W/2,H-130);
+    x.fillText('Valore legale: nessuno. Valore affettivo: da valutare.',W/2,H-92);
+    return c.toDataURL('image/jpeg',0.92);
+  }
+  function dataURLtoFile(d,name){
+    const [h,b]=d.split(','), bin=atob(b), u=new Uint8Array(bin.length);
+    for(let i=0;i<bin.length;i++) u[i]=bin.charCodeAt(i);
+    return new File([u],name,{type:'image/jpeg'});
+  }
+  document.getElementById('sendBtn').addEventListener('click',async()=>{
+    if(!hasSig){ note.textContent='Manca la firma: firma nello spazio qui sopra.'; return; }
+    const d=renderJPG(), name='verbale-consenso-chiara.jpg', file=dataURLtoFile(d,name);
+    try{
+      if(navigator.canShare && navigator.canShare({files:[file]})){
+        await navigator.share({files:[file], title:'Verbale di consenso'});
+        note.textContent='Verbale trasmesso. Grazie, Chiara.';
+        return;
+      }
+    }catch(e){ if(e && e.name==='AbortError'){ note.textContent=''; return; } }
+    const a=document.createElement('a'); a.href=d; a.download=name; document.body.appendChild(a); a.click(); a.remove();
+    note.textContent='Verbale scaricato: allegalo alla chat WhatsApp.';
+  });
+})();
+</script>
+</body>
+</html>
